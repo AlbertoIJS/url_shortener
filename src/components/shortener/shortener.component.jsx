@@ -14,16 +14,15 @@ const Shortener = () => {
       });
       const json = await res.json();
       const link = `https://rel.ink/${json.hashid}`;
-      return link;
+      setLinks((links) => [...links, link]);
     }
 
     if (!url) {
       return;
     } else {
-      const link = async () => await getUrl();
-      setLinks((links) => [...links, link]);
+      getUrl();
     }
-  }, [url, links]);
+  }, [url]);
 
   return (
     <Fragment>
@@ -38,14 +37,7 @@ const Shortener = () => {
           Shorten!
         </button>
       </form>
-      {/* useEffect(() => {
-    if (links) {
 
-      }
-  }, [links]) */}
-      {/* links
-        ? ''
-        :  */}
       {links.map((l, i) => (
         <div key={i.toString()} style={{ textAlign: 'center' }}>
           <p>{url}</p>
