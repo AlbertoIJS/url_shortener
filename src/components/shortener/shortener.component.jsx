@@ -1,53 +1,73 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
+import LinesEllipsis from 'react-lines-ellipsis';
+import responsiveHOC from 'react-lines-ellipsis/lib/responsiveHOC';
+
+const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis);
 
 const Shortener = () => {
-  const [url, setUrl] = useState('');
-  const [links, setLinks] = useState([]);
-  const [search, setSearch] = useState('');
-  // eslint-disable-next-line
-  const [copy, setCopy] = useState(false);
   const [urls, setUrls] = useState([]);
-  const [showUrl, setShowUrl] = useState(false);
+  const [links, setLinks] = useState([]);
+  const [copy, setCopy] = useState(false);
+  const [error, setError] = useState(false);
+  const inputUrl = useRef(null);
+
+  // Focus input at the start
+  useEffect(() => {
+    inputUrl.current.focus();
+  }, []);
 
   useEffect(() => {
-    async function getUrl() {
-      const res = await fetch('https://rel.ink/api/links/', {
+    if (copy) {
+      setTimeout(function () {
+        setCopy(false);
+      }, 1200);
+    }
+  }, [copy]);
+  // Get shortened url
+  async function getUrl(url) {
+    try {
+      const hashid = await fetch('https://rel.ink/api/links/', {
         method: 'POST',
         body: JSON.stringify({ url: url }),
         headers: { 'Content-Type': 'application/json' },
-      });
-      const json = await res.json();
-      const link = `https://rel.ink/${json.hashid}`;
-      setLinks((links) => [...links, link]);
+      })
+        .then((res) => res.json())
+        .then((json) => json.hashid);
+      setLinks((links) => [...links, `https://rel.ink/${hashid}`]);
+    } catch (error) {
+      console.error(error);
     }
+  }
 
-    if (!url) {
-      return;
-    } else {
-      getUrl();
-    }
-  }, [url, setLinks]);
-
-  console.log(links);
+  // Check for a valid link
   const validUrl = (s) => {
-    const regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
+    const regexp = new RegExp(
+      /[(http(s)?)://(www.)?a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)/gi
+    );
     return regexp.test(s);
   };
-  const handleClick = (s) => {
-    if (validUrl(s) && s !== '') {
-      setUrls([...urls, s]);
-      setUrl(s);
+
+  const handleClick = (e) => {
+    e.preventDefault();
+    let url = inputUrl.current.value;
+    if (validUrl(url)) {
+      setError(false);
+      setUrls((urls) => [...urls, url]);
+      getUrl(url);
     } else {
+      setError(true);
       return;
     }
   };
 
-  const handleChange = (e) => {
-    setSearch(e);
-    validUrl(e);
-    setShowUrl(e);
+  const handleCopy = () => {
+    setCopy(true);
+    // setTimeout(() => {
+    //   setCopy(false);
+    // }, 1500);
   };
+
   return (
     <div className="container" style={{ textAlign: 'center' }}>
       <h1>Shorten a url</h1>
@@ -62,30 +82,23 @@ const Shortener = () => {
       >
         <div>
           <input
+            ref={inputUrl}
             type="url"
-            onChange={(e) => handleChange(e.target.value)}
             placeholder="Write a url to shorten..."
             style={{ margin: '0 auto .5rem auto' }}
           />
-          {showUrl ? (
-            ''
-          ) : (
-            <small
-              style={{ display: 'block', color: 'red', fontSize: '.8rem' }}
-            >
-              Introduce a valid url
-            </small>
-          )}
+          <small style={{ display: 'block', color: 'red', fontSize: '.8rem' }}>
+            {error ? 'Introduce a valid url' : ''}
+          </small>
         </div>
         <button
           type="button"
-          onClick={() => handleClick(search)}
+          onClick={(e) => handleClick(e)}
           style={{ alignSelf: 'flex-start' }}
         >
-          Shorten!
+          Shorten It!
         </button>
       </form>
-
       {links.map((l, i) => (
         <div
           key={i.toString()}
@@ -95,12 +108,17 @@ const Shortener = () => {
             alignItems: 'center',
           }}
         >
-          <p>{urls[i]}</p>
+          <ResponsiveEllipsis
+            text={urls[i]}
+            trimRight
+            basedOn="letters"
+            style={{ marginTop: '1rem' }}
+          />
           <a href={l} style={{ color: 'lightblue' }}>
             {l}
           </a>
-          <CopyToClipboard onCopy={() => setCopy(true)} text={l}>
-            <button>Copy</button>
+          <CopyToClipboard onCopy={handleCopy} text={l}>
+            <button onClick={handleCopy}>{copy ? 'Copied' : 'Copy'}</button>
           </CopyToClipboard>
         </div>
       ))}
