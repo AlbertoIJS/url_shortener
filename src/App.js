@@ -1,8 +1,23 @@
 import React from 'react';
-import Shortener from './components/shortener/shortener.component';
+
+import './App.css';
+
+import Header from './components/header/header.component';
+import Hero from './components/hero/hero.component';
+import Cta from './components/cta/cta.component';
+import Footer from './components/footer/footer.component';
+import Details from './components/details/details.component';
 
 const App = () => {
-  return <Shortener></Shortener>;
+  return (
+    <>
+      <Header />
+      <Hero />
+      <Details />
+      <Cta />
+      <Footer />
+    </>
+  );
 };
 
 export default App;

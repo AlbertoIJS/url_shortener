@@ -2,6 +2,14 @@ import React, { useEffect, useRef, useState } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import LinesEllipsis from 'react-lines-ellipsis';
 import responsiveHOC from 'react-lines-ellipsis/lib/responsiveHOC';
+import {
+  Inputshortener,
+  ShortenerContainer,
+  UrlShortenerContainer,
+  ShortenedContainer,
+  DisplayError,
+} from './shortener.styles';
+import CustomButton from '../custom-button/custom-button.component';
 
 const ResponsiveEllipsis = responsiveHOC()(LinesEllipsis);
 
@@ -63,15 +71,14 @@ const Shortener = () => {
 
   const handleCopy = () => {
     setCopy(true);
-    // setTimeout(() => {
-    //   setCopy(false);
-    // }, 1500);
+    setTimeout(() => {
+      setCopy(false);
+    }, 1500);
   };
 
   return (
-    <div className="container" style={{ textAlign: 'center' }}>
-      <h1>Shorten a url</h1>
-      <form
+    <>
+      <UrlShortenerContainer
         method="POST"
         style={{
           textAlign: 'center',
@@ -80,49 +87,30 @@ const Shortener = () => {
           justifyContent: 'center',
         }}
       >
-        <div>
-          <input
+        <ShortenerContainer>
+          <Inputshortener
             ref={inputUrl}
             type="url"
             placeholder="Write a url to shorten..."
-            style={{ margin: '0 auto .5rem auto' }}
           />
-          <small style={{ display: 'block', color: 'red', fontSize: '.8rem' }}>
-            {error ? 'Introduce a valid url' : ''}
-          </small>
-        </div>
-        <button
-          type="button"
-          onClick={(e) => handleClick(e)}
-          style={{ alignSelf: 'flex-start' }}
-        >
-          Shorten It!
-        </button>
-      </form>
+          <DisplayError>{error ? 'Introduce a valid url' : ''}</DisplayError>
+          <CustomButton square onClick={(e) => handleClick(e)}>
+            Shorten It!
+          </CustomButton>
+        </ShortenerContainer>
+      </UrlShortenerContainer>
       {links.map((l, i) => (
-        <div
-          key={i.toString()}
-          style={{
-            display: 'flex',
-            justifyContent: 'space-evenly',
-            alignItems: 'center',
-          }}
-        >
-          <ResponsiveEllipsis
-            text={urls[i]}
-            trimRight
-            basedOn="letters"
-            style={{ marginTop: '1rem' }}
-          />
-          <a href={l} style={{ color: 'lightblue' }}>
-            {l}
-          </a>
+        <ShortenedContainer key={i.toString()}>
+          <ResponsiveEllipsis text={urls[i]} trimRight basedOn="letters" />
+          <a href={l}>{l}</a>
           <CopyToClipboard onCopy={handleCopy} text={l}>
-            <button onClick={handleCopy}>{copy ? 'Copied' : 'Copy'}</button>
+            <CustomButton square onClick={handleCopy}>
+              {copy ? 'Copied!' : 'Copy'}
+            </CustomButton>
           </CopyToClipboard>
-        </div>
+        </ShortenedContainer>
       ))}
-    </div>
+    </>
   );
 };
 
