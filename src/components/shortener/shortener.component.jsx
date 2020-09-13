@@ -18,6 +18,7 @@ const Shortener = () => {
   const [links, setLinks] = useState([]);
   const [copy, setCopy] = useState(false);
   const [error, setError] = useState(false);
+  const [color, setColor] = useState('');
   const inputUrl = useRef(null);
 
   // Focus input at the start
@@ -25,13 +26,6 @@ const Shortener = () => {
     inputUrl.current.focus();
   }, []);
 
-  useEffect(() => {
-    if (copy) {
-      setTimeout(function () {
-        setCopy(false);
-      }, 1200);
-    }
-  }, [copy]);
   // Get shortened url
   async function getUrl(url) {
     try {
@@ -58,6 +52,7 @@ const Shortener = () => {
 
   const handleClick = (e) => {
     e.preventDefault();
+
     let url = inputUrl.current.value;
     if (validUrl(url)) {
       setError(false);
@@ -70,8 +65,10 @@ const Shortener = () => {
   };
 
   const handleCopy = () => {
+    setColor('hsl(257, 27%, 26%)');
     setCopy(true);
     setTimeout(() => {
+      setColor('hsl(180, 66%, 49%)');
       setCopy(false);
     }, 1500);
   };
@@ -104,7 +101,11 @@ const Shortener = () => {
           <ResponsiveEllipsis text={urls[i]} trimRight basedOn="letters" />
           <a href={l}>{l}</a>
           <CopyToClipboard onCopy={handleCopy} text={l}>
-            <CustomButton square onClick={handleCopy}>
+            <CustomButton
+              style={{ backgroundColor: `${color}` }}
+              square
+              onClick={handleCopy}
+            >
               {copy ? 'Copied!' : 'Copy'}
             </CustomButton>
           </CopyToClipboard>
