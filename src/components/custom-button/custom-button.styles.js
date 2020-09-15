@@ -23,14 +23,13 @@ export const CustomButtonContainer = styled.button`
   color: white;
   border: none;
   font-family: 'Poppins', sans-serif;
-  font-size: 0.8rem;
+  font-size: 0.8em;
   font-weight: 700;
   cursor: pointer;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 0.5rem 1.2rem;
-
+  padding: 0.8rem 1rem;
   &:hover {
     opacity: 0.6;
   }

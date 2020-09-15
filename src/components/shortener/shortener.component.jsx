@@ -51,14 +51,15 @@ const Shortener = () => {
   };
 
   const handleClick = (e) => {
-    e.preventDefault();
-
     let url = inputUrl.current.value;
+
     if (validUrl(url)) {
       setError(false);
       setUrls((urls) => [...urls, url]);
       getUrl(url);
     } else {
+      inputUrl.current.style.border = '2px solid #f46262';
+      console.log(inputUrl.current.style);
       setError(true);
       return;
     }
@@ -75,23 +76,21 @@ const Shortener = () => {
 
   return (
     <>
-      <UrlShortenerContainer
-        method="POST"
-        style={{
-          textAlign: 'center',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
+      <UrlShortenerContainer>
         <ShortenerContainer>
-          <Inputshortener
-            ref={inputUrl}
-            type="url"
-            placeholder="Write a url to shorten..."
-          />
-          <DisplayError>{error ? 'Introduce a valid url' : ''}</DisplayError>
-          <CustomButton square onClick={(e) => handleClick(e)}>
+          <div style={{ width: '100%' }}>
+            <Inputshortener
+              ref={inputUrl}
+              type="url"
+              placeholder="Shorten a link here..."
+            />
+            <DisplayError>{error ? 'Introduce a valid url' : ''}</DisplayError>
+          </div>
+          <CustomButton
+            style={{ width: '15%', padding: '1.2rem auto' }}
+            square
+            onClick={(e) => handleClick(e)}
+          >
             Shorten It!
           </CustomButton>
         </ShortenerContainer>
