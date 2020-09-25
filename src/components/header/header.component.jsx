@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useRef } from 'react';
 
 import {
   HeaderContainer,
@@ -6,17 +6,36 @@ import {
   ListContainer,
   Section,
   LoginAndSignUp,
-} from "./header.styles";
+  Logo,
+  Menu,
+  Hamburger,
+} from './header.styles';
 
-import { ReactComponent as Logo } from "../../images/logo.svg";
-
-import CustomButton from "../custom-button/custom-button.component";
+import logo from '../../images/logo.svg';
+import CustomButton from '../custom-button/custom-button.component';
 
 const Header = () => {
+  const [click, setClick] = useState(false);
+  const dropDown = useRef();
+  const handleClick = (e) => {
+    if (click) {
+      dropDown.current.style.display = 'none';
+    } else {
+      dropDown.current.style.display = 'block';
+    }
+    setClick(!click);
+  };
   return (
     <HeaderContainer>
-      <NavContainer>
-        <Logo />
+      <Hamburger>
+        <Logo src={logo} alt="Shortly logo" />
+        <Menu onClick={(e) => handleClick(e)}>
+          <div></div>
+          <div></div>
+          <div></div>
+        </Menu>
+      </Hamburger>
+      <NavContainer ref={dropDown}>
         <ListContainer>
           <Section>
             <a href="#features">Features</a>
@@ -28,14 +47,12 @@ const Header = () => {
             <a href="#resources">Resources</a>
           </Section>
         </ListContainer>
+        <LoginAndSignUp>
+          <CustomButton login>Login</CustomButton>
+          <CustomButton>Sign Up</CustomButton>
+        </LoginAndSignUp>
       </NavContainer>
-
-      <LoginAndSignUp>
-        <CustomButton login>Login</CustomButton>
-        <CustomButton>Sign Up</CustomButton>
-      </LoginAndSignUp>
     </HeaderContainer>
   );
 };
-
 export default Header;

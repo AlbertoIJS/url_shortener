@@ -5,7 +5,7 @@ const DefaultButton = css`
 `;
 
 const LoginButton = css`
-  background-color: white;
+  background-color: transparent;
   color: hsl(0, 0%, 75%);
 `;
 
@@ -30,9 +30,10 @@ export const CustomButtonContainer = styled.button`
   justify-content: center;
   align-items: center;
   padding: 0.8rem 1rem;
-  &:hover {
-    opacity: 0.6;
+  @media screen and (min-width: 922px) {
+    &:hover {
+      opacity: 0.6;
+    }
   }
-
   ${getButtonStyles}
 `;

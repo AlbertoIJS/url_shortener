@@ -59,7 +59,6 @@ const Shortener = () => {
       getUrl(url);
     } else {
       inputUrl.current.style.border = '2px solid #f46262';
-      console.log(inputUrl.current.style);
       setError(true);
       return;
     }
