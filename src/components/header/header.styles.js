@@ -56,6 +56,7 @@ export const NavContainer = styled.nav`
   justify-content: space-between;
   align-items: center;
   flex-direction: column;
+  display: none;
   li {
     margin-bottom: 1.3rem;
   }
@@ -65,6 +66,7 @@ export const NavContainer = styled.nav`
 
   @media screen and (min-width: 992px) {
     flex-direction: row;
+    display: flex;
     background-color: white;
     width: 100%;
     border-radius: unset;
@@ -74,7 +76,7 @@ export const NavContainer = styled.nav`
       margin: unset;
     }
     li > a {
-      color: hsl(0, 0%, 75%);
+      color: gray;
     }
   }
 `;
@@ -101,9 +103,8 @@ export const Section = styled.li`
   display: flex;
   font-weight: 700;
   a {
-    color: white;
     text-decoration: none;
-    color: hsl(0, 0%, 75%);
+    color:gray; 
     @media screen and (min-width: 922px) {
       &:hover {
         color: hsl(255, 11%, 22%);
@@ -125,6 +126,7 @@ export const LoginAndSignUp = styled.div`
     color: white;
   }
   @media screen and (min-width: 922px) {
+    margin-top: 0;
     flex-direction: row;
     button:first-child {
       margin-right: 0.7rem;

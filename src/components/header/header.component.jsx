@@ -15,27 +15,29 @@ import logo from '../../images/logo.svg';
 import CustomButton from '../custom-button/custom-button.component';
 
 const Header = () => {
-  const [click, setClick] = useState(false);
+  const [click, setClick] = useState(true);
   const dropDown = useRef();
-  const handleClick = (e) => {
-    if (click) {
-      dropDown.current.style.display = 'none';
-    } else {
-      dropDown.current.style.display = 'block';
-    }
+
+  const handleClick = () => {
     setClick(!click);
+
+    if (click) {
+      dropDown.current.style.display = 'block';
+    } else {
+      dropDown.current.style.display = 'none';
+    }
   };
   return (
-    <HeaderContainer>
+    <HeaderContainer >
       <Hamburger>
         <Logo src={logo} alt="Shortly logo" />
-        <Menu onClick={(e) => handleClick(e)}>
+        <Menu onClick={() => handleClick()}>
           <div></div>
           <div></div>
           <div></div>
         </Menu>
       </Hamburger>
-      <NavContainer ref={dropDown}>
+      <NavContainer ref={dropDown} >
         <ListContainer>
           <Section>
             <a href="#features">Features</a>

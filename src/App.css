@@ -4,7 +4,6 @@
   box-sizing: border-box;
 }
 
-#root header,
-main {
+header {
   margin: 1.5rem;
 }

@@ -1,13 +1,18 @@
-import React from "react";
+import React from 'react';
 
-import { HeroContainer, TitleContainer, LeftSection } from "./hero.styles";
+import {
+  HeroContainer,
+  TitleContainer,
+  LeftSection,
+  HeroImg,
+} from './hero.styles';
 
-import { ReactComponent as HeroImage } from "../../images/illustration-working.svg";
+import heroImage from '../../images/illustration-working.svg';
 
-import CustomButton from "../custom-button/custom-button.component";
+import CustomButton from '../custom-button/custom-button.component';
 
 const Hero = () => (
-  <HeroContainer>
+  <HeroContainer >
     <LeftSection>
       <TitleContainer>More than just shorter links</TitleContainer>
       <p>
@@ -16,8 +21,13 @@ const Hero = () => (
       </p>
       <CustomButton>Get Started</CustomButton>
     </LeftSection>
-
-    <HeroImage />
+    <HeroImg>
+      <img
+        src={heroImage}
+        draggable="false"
+        alt="Person looking at a screen sitting on a chair"
+      />
+    </HeroImg>
   </HeroContainer>
 );
 

@@ -12,8 +12,8 @@ const App = () => {
   return (
     <>
       <Header />
-      {/* <Hero />
-      <Details />
+      <Hero />
+      {/*<Details />
       <Cta />
       <Footer /> */}
     </>
